@@ -103,12 +103,9 @@ class ModelTrainer:
 
                 
                 "XGBoost": {
-                "n_estimators": [300, 500, 800, 1000],
-                "max_depth": [3, 5, 7, 9, 12],
-                "learning_rate": [0.01, 0.03, 0.05, 0.1],
-                "subsample": [0.6, 0.8, 1.0],
-                "colsample_bytree": [0.6, 0.8, 1.0],
-                "min_child_weight": [1, 3, 5]
+                "n_estimators": [100, 200, 300],
+                "max_depth": [3, 5, 7],
+                "learning_rate": [0.01, 0.05, 0.1]
                 },
                 
 

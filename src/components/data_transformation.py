@@ -46,9 +46,6 @@ class DataTransformation:
                 "Longitude",
                 "Latitude",
 
-                # ✅ NEW FEATURES ADDED
-                "NDVI_LST",
-                "Built_Population"
             ]
 
             categorical_columns = []
@@ -91,15 +88,12 @@ class DataTransformation:
 
             logging.info("Train and Test data loaded")
 
-            # =====================================================
-            # 🔥 FEATURE ENGINEERING (ADDED HERE)
-            # =====================================================
             for df in [train_df, test_df]:
-                df["NDVI_LST"] = df["NDVI"] * df["LST"]
+                # NDVI_LST = NDVI / LST
+                df["NDVI_LST"] = df["NDVI"] / df["LST"]
+
+                # Built_Population = BuiltSurface * PopulationDensity
                 df["Built_Population"] = df["BuiltSurface"] * df["PopulationDensity"]
-
-                df["WaterDistance"] = np.log1p(df["WaterDistance"])
-
             preprocessing_obj = self.get_data_transformer_object()
 
             target_column_name = "LST"
