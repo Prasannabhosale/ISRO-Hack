@@ -10,8 +10,6 @@ from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
-from components import data_ingestion
-from components import data_ingestion
 from src.exception import CustomException
 from src.logger import logging
 from src.utils import save_object
@@ -38,19 +36,18 @@ class DataTransformation:
                 "AirTemp",
                 "BuiltSurface",
                 "Elevation",
+                "LULC",
                 "NDBI",
                 "NDVI",
                 "PopulationDensity",
+                "UrbanClass",
                 "WaterDistance",
                 "WindSpeed",
                 "Longitude",
                 "Latitude"
-            ]
+        ]
 
-            categorical_columns = [
-                "LULC",
-                "UrbanClass"
-            ]
+            categorical_columns = []
 
             num_pipeline = Pipeline(
                 steps=[
@@ -94,10 +91,10 @@ class DataTransformation:
 
             target_column_name = "LST"
 
-            input_feature_train_df = train_df.drop(columns=[target_column_name], axis=1)
+            input_feature_train_df = train_df.drop(columns=[target_column_name])
             target_feature_train_df = train_df[target_column_name]
 
-            input_feature_test_df = test_df.drop(columns=[target_column_name], axis=1)
+            input_feature_test_df = test_df.drop(columns=[target_column_name])
             target_feature_test_df = test_df[target_column_name]
 
             logging.info("Applying preprocessing")
@@ -139,7 +136,7 @@ class DataTransformation:
 from src.components.data_transformation import DataTransformation
 
 if __name__ == "__main__":
-    obj = data_ingestion()
+    obj = DataIngestion()
 
     train_path, test_path = obj.initiate_data_ingestion()
 

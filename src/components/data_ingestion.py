@@ -1,3 +1,4 @@
+from src.components.data_transformation import DataTransformation
 import os
 import sys
 import pandas as pd
@@ -13,9 +14,12 @@ from src.logger import logging
 # ========================
 @dataclass
 class DataIngestionConfig:
+    data_path = os.path.join("notebook", "data", "Pune_UHI_Final_Dataset.csv")
     train_data_path: str = os.path.join("artifacts", "train.csv")
     test_data_path: str = os.path.join("artifacts", "test.csv")
     raw_data_path: str = os.path.join("artifacts", "data.csv")
+
+   
 
 
 # ========================
@@ -32,8 +36,8 @@ class DataIngestion:
             # ------------------------
             # Load dataset
             # ------------------------
-            data_path = os.path.join("notebook", "data", "Pune_UHI_Final_Dataset.csv")
-            df = pd.read_csv(data_path)
+    
+            df = pd.read_csv(self.ingestion_config.data_path)
             logging.info("Dataset loaded successfully")
 
             # ------------------------
@@ -81,9 +85,19 @@ class DataIngestion:
 # RUN PIPELINE
 # ========================
 if __name__ == "__main__":
+
     obj = DataIngestion()
+
     train_data_path, test_data_path = obj.initiate_data_ingestion()
 
     print("Data Ingestion Completed Successfully")
-    print("Train Path:", train_data_path)
-    print("Test Path:", test_data_path)
+
+    data_transformation = DataTransformation()
+
+    train_arr, test_arr, preprocessor_path = data_transformation.initiate_data_transformation(
+        train_data_path,
+        test_data_path
+    )
+
+    print("Data Transformation Completed Successfully")
+    print("Preprocessor saved at:", preprocessor_path)
