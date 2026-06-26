@@ -44,8 +44,12 @@ class DataTransformation:
                 "WaterDistance",
                 "WindSpeed",
                 "Longitude",
-                "Latitude"
-        ]
+                "Latitude",
+
+                # ✅ NEW FEATURES ADDED
+                "NDVI_LST",
+                "Built_Population"
+            ]
 
             categorical_columns = []
 
@@ -86,6 +90,15 @@ class DataTransformation:
             test_df = pd.read_csv(test_path)
 
             logging.info("Train and Test data loaded")
+
+            # =====================================================
+            # 🔥 FEATURE ENGINEERING (ADDED HERE)
+            # =====================================================
+            for df in [train_df, test_df]:
+                df["NDVI_LST"] = df["NDVI"] * df["LST"]
+                df["Built_Population"] = df["BuiltSurface"] * df["PopulationDensity"]
+
+                df["WaterDistance"] = np.log1p(df["WaterDistance"])
 
             preprocessing_obj = self.get_data_transformer_object()
 
@@ -132,10 +145,14 @@ class DataTransformation:
 
         except Exception as e:
             raise CustomException(e, sys)
-        
-from src.components.data_transformation import DataTransformation
 
+
+# =========================
+# RUN TEST (OPTIONAL)
+# =========================
 if __name__ == "__main__":
+    from src.components.data_ingestion import DataIngestion
+
     obj = DataIngestion()
 
     train_path, test_path = obj.initiate_data_ingestion()
@@ -146,3 +163,5 @@ if __name__ == "__main__":
         train_path,
         test_path
     )
+
+    print("Transformation Completed")
